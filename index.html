@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventoGenius - Gestión de Eventos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7fafc;
+        }
+        .app-container {
+            max-width: 414px; 
+            height: 100vh;
+            margin: auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        .nav-icon.active .icon {
+            fill: #E91E63; 
+        }
+        .nav-icon.active span {
+            color: #E91E63;
+            font-weight: 600;
+        }
+        .placeholder-image {
+            background-color: #f0f2f5;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-style: italic;
+            color: #b0b8c0;
+            text-align: center;
+        }
+        .progress-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#E91E63 0%, #E91E63 var(--progress), #e2e8f0 var(--progress), #e2e8f0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .progress-inner {
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .floating-button {
+            position: fixed;
+            bottom: 6rem;
+            right: calc(50% - 180px); 
+            z-index: 10;
+        }
+        @media (max-width: 414px) {
+            .app-container {
+                border-radius: 0;
+            }
+            .floating-button {
+                right: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+
+        <!-- Main Header -->
+        <header class="p-4 bg-white border-b border-gray-200">
+            <h1 class="text-xl font-bold text-gray-900">EventoGenius</h1>
+        </header>
+
+        <!-- Screen Content - Dashboard -->
+        <div id="dashboard-screen" class="content">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Boda de Alejandro y Javiera</h2>
+            <p class="text-sm text-gray-500 mb-6">25 de Diciembre, 2025</p>
+
+            <!-- Main Progress Indicator -->
+            <div class="flex flex-col items-center mb-8">
+                <div class="progress-circle" style="--progress: 75%;">
+                    <div class="progress-inner">
+                        <span class="text-4xl font-bold text-gray-800">75%</span>
+                        <span class="text-sm text-gray-500 mt-1">Completado</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Widgets -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Upcoming Tasks Widget -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="font-semibold text-lg mb-2 text-gray-700">Próximas Tareas</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-gray-600">
+                            <span class="w-2 h-2 rounded-full bg-blue-400 mr-2"></span>
+                            <span>Reservar fotógrafo (12/10)</span>
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <span class="w-2 h-2 rounded-full bg-yellow-400 mr-2"></span>
+                            <span>Enviar invitaciones (15/10)</span>
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <span class="w-2 h-2 rounded-full bg-blue-400 mr-2"></span>
+                            <span>Elegir el menú (20/10)</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Budget Summary Widget -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="font-semibold text-lg mb-2 text-gray-700">Resumen de Presupuesto</h3>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-gray-600">Gastado:</span>
+                        <span class="font-semibold text-gray-800">$15,000</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Presupuesto total:</span>
+                        <span class="font-semibold text-gray-800">$20,000</span>
+                    </div>
+                    <div class="w-full h-2 bg-gray-200 rounded-full mt-4">
+                        <div class="h-full bg-pink-500 rounded-full" style="width: 75%;"></div>
+                    </div>
+                </div>
+
+                <!-- Guest Count Widget -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200 md:col-span-2">
+                    <h3 class="font-semibold text-lg mb-2 text-gray-700">Invitados</h3>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800">120</p>
+                            <p class="text-sm text-gray-500">Confirmados</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800">150</p>
+                            <p class="text-sm text-gray-500">Invitados totales</p>
+                        </div>
+                    </div>
+                    <div class="w-full h-2 bg-gray-200 rounded-full mt-4">
+                        <div class="h-full bg-green-500 rounded-full" style="width: 80%;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Screen Content - Task List -->
+        <div id="tasks-screen" class="content hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Checklist de Tareas</h2>
+            
+            <div class="space-y-4">
+                <!-- Task Card 1 (In Progress) -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="w-6 h-6 rounded-full border-2 border-yellow-400 mr-3 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-400"><path d="M10 4.5l-4.5 9 9-4.5 4.5-9-9 4.5zM17.5 17.5l-5-5"></path></svg>
+                            </span>
+                            <div>
+                                <h3 class="font-semibold text-gray-700">Reservar el lugar</h3>
+                                <p class="text-sm text-gray-500">Fecha límite: 30/09/25</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">En progreso</span>
+                    </div>
+                </div>
+
+                <!-- Task Card 2 (Completed) -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="w-6 h-6 rounded-full bg-green-500 mr-3 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6L9 17L4 12"/></svg>
+                            </span>
+                            <div>
+                                <h3 class="font-semibold text-gray-700 line-through">Definir el concepto del evento</h3>
+                                <p class="text-sm text-gray-500">Fecha límite: 15/09/25</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">Completada</span>
+                    </div>
+                </div>
+                
+                <!-- Task Card 3 (Pending) -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="w-6 h-6 rounded-full border-2 border-gray-400 mr-3 flex items-center justify-center">
+                            </span>
+                            <div>
+                                <h3 class="font-semibold text-gray-700">Enviar invitaciones</h3>
+                                <p class="text-sm text-gray-500">Fecha límite: 15/10/25</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">Pendiente</span>
+                    </div>
+                </div>
+                
+                <!-- Task Card 4 (Pending) -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="w-6 h-6 rounded-full border-2 border-gray-400 mr-3 flex items-center justify-center">
+                            </span>
+                            <div>
+                                <h3 class="font-semibold text-gray-700">Contratar catering</h3>
+                                <p class="text-sm text-gray-500">Fecha límite: 25/10/25</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">Pendiente</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Action Button -->
+            <button class="floating-button w-14 h-14 bg-pink-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-pink-600 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            </button>
+        </div>
+        
+        <!-- Screen Content - Guest Management -->
+        <div id="guests-screen" class="content hidden">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Gestión de Invitados</h2>
+
+            <!-- Guest Summary -->
+            <div class="bg-pink-50 p-4 rounded-xl mb-6 flex items-center justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold text-pink-700">Estado de Confirmaciones</h3>
+                    <p class="text-sm text-pink-600">120 de 150 invitados han confirmado</p>
+                </div>
+                <button class="bg-pink-200 text-pink-800 px-4 py-2 rounded-xl text-sm font-medium">
+                    Enviar Invitaciones
+                </button>
+            </div>
+            
+            <!-- Guest List -->
+            <div class="space-y-3">
+                <!-- Guest 1 -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-green-500 mr-4 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check"><path d="M20 6L9 17L4 12"/></svg>
+                        </span>
+                        <span class="font-medium text-gray-700">Ana Fernández</span>
+                    </div>
+                    <span class="text-sm font-semibold text-green-700">Confirmado</span>
+                </div>
+                <!-- Guest 2 -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-red-500 mr-4 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6L6 18"/><path d="M6 6L18 18"/></svg>
+                        </span>
+                        <span class="font-medium text-gray-700">Carlos Giménez</span>
+                    </div>
+                    <span class="text-sm font-semibold text-red-700">No asiste</span>
+                </div>
+                <!-- Guest 3 -->
+                <div class="bg-gray-50 p-4 rounded-xl shadow-sm border border-gray-200 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <span class="w-8 h-8 rounded-full bg-yellow-400 mr-4 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-help-circle"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                        </span>
+                        <span class="font-medium text-gray-700">Sofía Torres</span>
+                    </div>
+                    <span class="text-sm font-semibold text-yellow-700">Pendiente</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bg-white border-t border-gray-200 py-2">
+            <ul class="flex justify-around items-center">
+                <li class="nav-icon active">
+                    <button id="nav-dashboard" class="flex flex-col items-center p-2 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                        <span class="text-xs mt-1">Inicio</span>
+                    </button>
+                </li>
+                <li class="nav-icon">
+                    <button id="nav-tasks" class="flex flex-col items-center p-2 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                            <path d="M12 20h9"/>
+                            <path d="M16.5 3.5l-2.4 2.4a2.1 2.1 0 0 1-3 0L3 10.5V14l7.5-7.5a2.1 2.1 0 0 1 3 0l.9.9"/>
+                            <path d="M7 17l-5 5"/>
+                            <path d="M8 18l5-5"/>
+                        </svg>
+                        <span class="text-xs mt-1">Tareas</span>
+                    </button>
+                </li>
+                <li class="nav-icon">
+                    <button id="nav-guests" class="flex flex-col items-center p-2 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <span class="text-xs mt-1">Invitados</span>
+                    </button>
+                </li>
+                <li class="nav-icon">
+                    <button id="nav-more" class="flex flex-col items-center p-2 text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
+                            <circle cx="12" cy="12" r="1"/>
+                            <circle cx="19" cy="12" r="1"/>
+                            <circle cx="5" cy="12" r="1"/>
+                        </svg>
+                        <span class="text-xs mt-1">Más</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const screens = {
+                'dashboard': document.getElementById('dashboard-screen'),
+                'tasks': document.getElementById('tasks-screen'),
+                'guests': document.getElementById('guests-screen')
+            };
+
+            const navButtons = {
+                'dashboard': document.getElementById('nav-dashboard'),
+                'tasks': document.getElementById('nav-tasks'),
+                'guests': document.getElementById('nav-guests')
+            };
+
+            const navIcons = {
+                'dashboard': navButtons.dashboard.closest('.nav-icon'),
+                'tasks': navButtons.tasks.closest('.nav-icon'),
+                'guests': navButtons.guests.closest('.nav-icon')
+            }
+
+            function setActiveScreen(screenId) {
+                // Hide all screens
+                Object.values(screens).forEach(screen => screen.classList.add('hidden'));
+                // Show the selected screen
+                screens[screenId].classList.remove('hidden');
+
+                // Remove active class from all nav icons
+                Object.values(navIcons).forEach(icon => icon.classList.remove('active'));
+                // Add active class to the selected nav icon
+                navIcons[screenId].classList.add('active');
+            }
+
+            // Set initial screen to dashboard
+            setActiveScreen('dashboard');
+
+            // Add event listeners for navigation buttons
+            navButtons.dashboard.addEventListener('click', () => setActiveScreen('dashboard'));
+            navButtons.tasks.addEventListener('click', () => setActiveScreen('tasks'));
+            navButtons.guests.addEventListener('click', () => setActiveScreen('guests'));
+        });
+    </script>
+
+</body>/* Adjust to be within the container */
+</html>
